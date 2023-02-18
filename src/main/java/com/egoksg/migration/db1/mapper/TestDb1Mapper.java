@@ -9,4 +9,5 @@ import com.egoksg.migration.db1.model.TestDb1Dto;
 @Mapper
 public interface TestDb1Mapper {
 	List<TestDb1Dto> select();
+	int insert(TestDb1Dto dto);
 }
