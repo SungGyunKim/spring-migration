@@ -8,4 +8,12 @@
     FROM
       TB_TEST_DB1
   </select>
+  
+  <insert id="insert" parameterType="TestDb1Dto">
+    INSERT TB_TEST_DB1 (
+      NAME
+    ) VALUES (
+      #{name}
+    )
+  </insert>
 </mapper>
