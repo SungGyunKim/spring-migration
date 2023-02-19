@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.test.JobLauncherTestUtils;
@@ -30,9 +31,8 @@ public class BaseDatabaseTest {
 	@Autowired
 	private BaseMapper baseMapper;
 	
-	@Autowired
 	@Qualifier("sqlSessionTemplate")
-	public SqlSession sqlSessionTemplate;
+	public SqlSession sqlSession;
 	
 	@Autowired
 	@Qualifier("batchSqlSessionTemplate")
@@ -61,17 +61,19 @@ public class BaseDatabaseTest {
 	@Commit // @Test에서 @Transactional은 자동으로 commit을 하지 않아 수동으로 해줘야 한다. ref) https://www.inflearn.com/questions/257700
 	public void bulkInsertTest() {
 		for (int i = 0; i < 1_000_000; i++) {
-			batchSqlSession.insert("com.egoksg.migration.base.mapper.BaseMapper.insertAutoPk", BaseDto.builder().name("BATCH").build());
+			batchSqlSession.insert("com.egoksg.migration.base.mapper.BaseMapper.insertAutoPkDto", BaseDto.builder().name("BATCH").build());
 		}
 	}
 	
-	@DisplayName("Batch Test")
+	@DisplayName("Dto Batch Job Test")
 	@Test
-	public void jobExecuteTest() throws Exception {
+	public void baseDtoJobTest(@Qualifier("baseDtoJob") Job baseDtoJob) throws Exception {
+		baseMapper.delete();
+		
 		// given
 		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
 		// when
-		JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
+		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(baseDtoJob, jobParameters);
 		// then
 		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
 	}

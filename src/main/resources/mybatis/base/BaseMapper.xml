@@ -4,6 +4,7 @@
   <sql id="mariadb_paging">
     LIMIT #{_skiprows}, #{_pagesize}
   </sql>
+  
   <select id="selectPagingDto" resultType="BaseDto">
     SELECT
       NO
@@ -30,4 +31,12 @@
      ,#{name}
     )
   </insert>
+  
+  <delete id="delete">
+    SELECT
+      NO
+     ,NAME
+    FROM
+      TB_TEST_DB2
+  </delete>
 </mapper>

@@ -28,11 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseBatchConfig {
 	public final CustomChunkListener customChunkListener;
 	
-	@Bean
-	public Job baseJob(JobRepository jobRepository, Step dtoStep) {
-		return new JobBuilder("BaseJob", jobRepository)
+	@Bean("baseDtoJob")
+	public Job baseJob(JobRepository jobRepository, Step baseDtoStep) {
+		return new JobBuilder("baseDtoJob", jobRepository)
 			.incrementer(new RunIdIncrementer())
-			.flow(dtoStep)
+			.flow(baseDtoStep)
 			.end()
 			.build();
 	}

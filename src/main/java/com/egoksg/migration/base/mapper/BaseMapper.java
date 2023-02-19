@@ -11,4 +11,5 @@ public interface BaseMapper {
 	List<BaseDto> selectPagingDto();
 	int insertAutoPkDto(BaseDto dto);
 	int insertManualPkDto(BaseDto dto);
+	int delete();
 }
