@@ -47,11 +47,11 @@ public class BaseBatchConfig {
 		MyBatisPagingItemReader<BaseDto> reader = new MyBatisPagingItemReaderBuilder<BaseDto>()
 				.sqlSessionFactory(sqlSessionFactory)
 				.pageSize(dataSize)
-				.queryId("com.egoksg.migration.base.mapper.BaseMapper.selectPaging")
+				.queryId("com.egoksg.migration.base.mapper.BaseMapper.selectPagingDto")
 				.build();
 		MyBatisBatchItemWriter<BaseDto> writer = new MyBatisBatchItemWriterBuilder<BaseDto>()
 				.sqlSessionTemplate(batchSqlSessionTemplate)
-				.statementId("com.egoksg.migration.base.mapper.BaseMapper.insertManualPk")
+				.statementId("com.egoksg.migration.base.mapper.BaseMapper.insertManualPkDto")
 				.build();
 		
 		return new StepBuilder("step1", jobRepository)

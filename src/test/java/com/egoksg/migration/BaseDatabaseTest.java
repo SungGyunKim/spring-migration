@@ -52,7 +52,7 @@ public class BaseDatabaseTest {
 	@DisplayName("Single Insert Test")
 	@Test
 	public void singleInsertTest() {
-		baseMapper.insertAutoPk(BaseDto.builder().name("INSERT").build());
+		baseMapper.insertAutoPkDto(BaseDto.builder().name("INSERT").build());
 	}
 	
 	@DisplayName("Bulk Insert Test")

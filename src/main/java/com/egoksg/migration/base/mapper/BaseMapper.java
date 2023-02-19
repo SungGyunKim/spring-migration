@@ -8,7 +8,7 @@ import com.egoksg.migration.base.model.BaseDto;
 
 @Mapper
 public interface BaseMapper {
-	List<BaseDto> selectPaging();
-	int insertAutoPk(BaseDto dto);
-	int insertManualPk(BaseDto dto);
+	List<BaseDto> selectPagingDto();
+	int insertAutoPkDto(BaseDto dto);
+	int insertManualPkDto(BaseDto dto);
 }

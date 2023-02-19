@@ -4,7 +4,7 @@
   <sql id="mariadb_paging">
     LIMIT #{_skiprows}, #{_pagesize}
   </sql>
-  <select id="selectPaging" resultType="BaseDto">
+  <select id="selectPagingDto" resultType="BaseDto">
     SELECT
       NO
      ,NAME
@@ -13,7 +13,7 @@
       <include refid="mariadb_paging"></include>
   </select>
   
-  <insert id="insertAutoPk" parameterType="BaseDto">
+  <insert id="insertAutoPkDto" parameterType="BaseDto">
     INSERT TB_TEST_DB1 (
       NAME
     ) VALUES (
@@ -21,7 +21,7 @@
     )
   </insert>
   
-  <insert id="insertManualPk" parameterType="BaseDto">
+  <insert id="insertManualPkDto" parameterType="BaseDto">
     INSERT TB_TEST_DB2 (
       NO
      ,NAME
