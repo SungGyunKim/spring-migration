@@ -24,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.egoksg.migration.base.mapper.BaseMapper;
 import com.egoksg.migration.base.model.BaseDto;
 import com.egoksg.migration.com.CustomChunkListener;
+import com.egoksg.migration.com.MigrationStepBuilderUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -119,4 +120,61 @@ public class BaseBatchConfig {
 				.writer(writer)
 				.build();
 	}
+	
+	@Bean("baseMapJobByUtil1")
+	public Job baseMapJobByUtil(JobRepository jobRepository, Step deleteStep, Step baseMapStepByUtil) {
+		return new JobBuilder("baseMapJobByUtil", jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(deleteStep)
+				.on("COMPLETED")
+				.to(baseMapStepByUtil)
+			.end()
+			.build();
+	}
+	
+	@JobScope
+	@Bean
+	public Step baseMapStepByUtil(
+			JobRepository jobRepository, PlatformTransactionManager transactionManager,
+			@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory,
+			@Qualifier("batchSqlSessionTemplate") SqlSessionTemplate batchSqlSessionTemplate
+	) {
+		return MigrationStepBuilderUtil.<Map<String, ?>, Map<String, ?>>getMyBatisChunkStepBuilder(
+				jobRepository,
+				transactionManager, sqlSessionFactory, batchSqlSessionTemplate,
+				customChunkListener,
+				"step1", 10_000,
+				"com.egoksg.migration.base.mapper.BaseMapper.selectPagingMap",
+				"com.egoksg.migration.base.mapper.BaseMapper.insertManualPkMap"
+		).build();
+	}
+	
+	@Bean("baseMapJobByUtil2")
+	public Job baseMapJobByUtil2(JobRepository jobRepository, PlatformTransactionManager transactionManager,
+			@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory,
+			@Qualifier("batchSqlSessionTemplate") SqlSessionTemplate batchSqlSessionTemplate
+	) {
+		Step deleteStep = MigrationStepBuilderUtil.getDeleteStepBuilder(
+				jobRepository, transactionManager,
+				batchSqlSessionTemplate,
+				"com.egoksg.migration.base.mapper.BaseMapper.delete"
+		).build();
+		Step baseMapStepByUtil = MigrationStepBuilderUtil.<Map<String, ?>, Map<String, ?>>getMyBatisChunkStepBuilder(
+				jobRepository, transactionManager,
+				sqlSessionFactory, batchSqlSessionTemplate,
+				customChunkListener,
+				"step1", 10_000,
+				"com.egoksg.migration.base.mapper.BaseMapper.selectPagingMap",
+				"com.egoksg.migration.base.mapper.BaseMapper.insertManualPkMap"
+		).build();
+		
+		return new JobBuilder("baseMapJobByUtil2", jobRepository)
+			.incrementer(new RunIdIncrementer())
+			.start(deleteStep)
+				.on("COMPLETED")
+				.to(baseMapStepByUtil)
+			.end()
+			.build();
+	}
+	
 }

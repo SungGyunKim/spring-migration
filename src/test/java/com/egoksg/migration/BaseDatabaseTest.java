@@ -68,22 +68,32 @@ public class BaseDatabaseTest {
 	@DisplayName("Dto Job Test")
 	@Test
 	public void baseDtoJobTest(@Qualifier("baseDtoJob") Job job) throws Exception {
-		// given
 		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
-		// when
 		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
-		// then
 		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
 	}
 	
 	@DisplayName("Map Job Test")
 	@Test
 	public void baseMapJobTest(@Qualifier("baseMapJob") Job job) throws Exception {
-		// given
 		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
-		// when
 		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
-		// then
+		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
+	}
+	
+	@DisplayName("Map Job Test by Util1")
+	@Test
+	public void baseMapJobByUtil1Test(@Qualifier("baseMapJobByUtil1") Job job) throws Exception {
+		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
+		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
+		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
+	}
+	
+	@DisplayName("Map Job Test by Util2")
+	@Test
+	public void baseMapJobByUtil2Test(@Qualifier("baseMapJobByUtil2") Job job) throws Exception {
+		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
+		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
 		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
 	}
 }
