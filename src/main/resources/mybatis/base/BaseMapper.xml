@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egoksg.migration.base.mapper.BaseMapper">
+  <sql id="mariadb_paging">
+    LIMIT #{_skiprows}, #{_pagesize}
+  </sql>
+  <select id="selectPaging" resultType="BaseDto">
+    SELECT
+      NO
+     ,NAME
+    FROM
+      TB_TEST_DB1
+      <include refid="mariadb_paging"></include>
+  </select>
+  
+  <insert id="insertAutoPk" parameterType="BaseDto">
+    INSERT TB_TEST_DB1 (
+      NAME
+    ) VALUES (
+      #{name}
+    )
+  </insert>
+  
+  <insert id="insertManualPk" parameterType="BaseDto">
+    INSERT TB_TEST_DB2 (
+      NO
+     ,NAME
+    ) VALUES (
+      #{no}
+     ,#{name}
+    )
+  </insert>
+</mapper>
