@@ -14,6 +14,15 @@
       <include refid="mariadb_paging"></include>
   </select>
   
+  <select id="selectPagingMap" resultType="map">
+    SELECT
+      NO
+     ,NAME
+    FROM
+      TB_TEST_DB1
+      <include refid="mariadb_paging"></include>
+  </select>
+  
   <insert id="insertAutoPkDto" parameterType="BaseDto">
     INSERT TB_TEST_DB1 (
       NAME
@@ -32,11 +41,17 @@
     )
   </insert>
   
-  <delete id="delete">
-    SELECT
+  <insert id="insertManualPkMap" parameterType="map">
+    INSERT TB_TEST_DB2 (
       NO
      ,NAME
-    FROM
-      TB_TEST_DB2
+    ) VALUES (
+      #{no}
+     ,#{name}
+    )
+  </insert>
+  
+  <delete id="delete">
+    DELETE FROM TB_TEST_DB2
   </delete>
 </mapper>

@@ -65,15 +65,24 @@ public class BaseDatabaseTest {
 		}
 	}
 	
-	@DisplayName("Dto Batch Job Test")
+	@DisplayName("Dto Job Test")
 	@Test
-	public void baseDtoJobTest(@Qualifier("baseDtoJob") Job baseDtoJob) throws Exception {
-		baseMapper.delete();
-		
+	public void baseDtoJobTest(@Qualifier("baseDtoJob") Job job) throws Exception {
 		// given
 		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
 		// when
-		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(baseDtoJob, jobParameters);
+		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
+		// then
+		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
+	}
+	
+	@DisplayName("Map Job Test")
+	@Test
+	public void baseMapJobTest(@Qualifier("baseMapJob") Job job) throws Exception {
+		// given
+		JobParameters jobParameters = jobLauncherTestUtils.getUniqueJobParameters();
+		// when
+		JobExecution jobExecution = jobLauncherTestUtils.getJobLauncher().run(job, jobParameters);
 		// then
 		assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
 	}
